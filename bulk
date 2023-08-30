@@ -1,0 +1,395 @@
+import java.util.ArrayList;
+public class SalariesDatabase extends Database {
+        
+    private ArrayList <Salaries> arr = new ArrayList<Salaries>();
+    
+    public SalariesDatabase() {
+        //since this is a subclass, we are instantiating the DataBase file for Salaries.
+        super("Salaries.csv");
+        
+         //creating an ArrayList to append salary objects to.
+        ArrayList<Salaries> arr = new ArrayList<Salaries>();
+        
+        // Given a data "field name", get an array of all of 
+        //   data values.  
+        // Returns an array of every line of data for that field.  
+        // Note: use the method that matches the type of data to be read
+        //   fetchStringArray for Strings
+        //   fetchIntArray for integers
+        //   fetchDoubleArray for doubles
+
+        //creating an array for every value of the Salaries Database that Im using or referencing
+        //since this class is an extension of the Database class, we can call the fetchArray methods WITHOUT 
+        //needing to call a Database object on them. (like sdb which we used previously before moving this into the constructor)
+      	String [] allExperienceLevels = fetchStringArray("experience_level");
+        String [] allEmploymentTypes = fetchStringArray("employment_type");
+        String [] allJobTitles = fetchStringArray("job_title");
+        int [] allSalaries = fetchIntArray("salary");
+        int [] allSalariesinUSD = fetchIntArray("salary_in_usd");
+        String [] allEmployeeResidences = fetchStringArray("employee_residence");
+        int [] allRemoteRatios = fetchIntArray("remote_ratio"); 
+        String [] allCompanyLocations = fetchStringArray("company_location");
+        String [] allCompanySizes = fetchStringArray("company_size");
+           
+        //for loop loops through every value in every column and saves it to a value.
+        //then we use the Salaries constructor to create a new Salaries object.
+      	for( int idx = 0; idx < allJobTitles.length; idx++ ) {
+      	    
+      	   String expLevel = allExperienceLevels[idx];
+      	   String empType = allEmploymentTypes[idx];
+      	   String job = allJobTitles[idx];
+      	   int salary = allSalaries[idx];
+      	   int salaryInUSD = allSalariesinUSD[idx];
+      	   String empResidence = allEmployeeResidences[idx];
+      	   int remoteRatio = allRemoteRatios[idx];
+      	   String compLocation = allCompanyLocations[idx];
+      	   String compSize = allCompanySizes[idx];
+      	   
+      	   Salaries s = new Salaries(expLevel, empType, job, salary, salaryInUSD, 
+      	                    empResidence, remoteRatio, compLocation, compSize);
+      	                    
+      	 //then we add the new Salaries object to the ArrayList.
+      	   arr.add(s);
+        }
+        //so we are adding all of these values to the ArrayList, and since this is the constructor,
+        // setting the ArrayList AFTER.
+        this.arr = arr;
+    }
+        
+    //the search query. getSalary returns a Salaries object given a level of 
+    //experience, company location, and company size.
+    public Salaries getSalaries(String expLevel, String job, String compLocation, String compSize) {
+                                    
+     for (int idx = 0; idx < arr.size(); idx++) {
+         //creating temporary salaries object x to call each "if-statement" on.
+         Salaries x = arr.get(idx);
+            if (x.getExpLevel().equals(expLevel) && x.getJob().equals(job) && x.getCompLocation().equals(compLocation) && x.getCompSize().equals(compSize)) {
+                return x;
+            }
+     }
+                return null;        
+    }
+    
+    //the characteristic search query, this method getSalariesMoreThan filters thru the arr
+    // ArrayList and returns a new ArrayList of Salaries objects more than the amount of the given int parameter.
+    public ArrayList<Salaries> getSalariesMoreThan(int amount) {
+        
+        ArrayList<Salaries> highSals = new ArrayList<Salaries>();
+        
+        for (int idx = 0; idx < arr.size(); idx++) {
+            //creating temporary salaries object x to call on.
+            Salaries x = arr.get(idx);
+            if (x.getSalaryInUSD() >= amount) {
+                highSals.add(x);
+            }
+        }
+        return highSals;
+    }
+    
+    //the calculation query. getAverageSalaryinUSD returns a double indicating the average Data Science 
+    //salary out of all the salaries, using the arr ArrayList.
+    public double getAverageSalaryinUSD() {
+        double average = 0;
+        double count = 0;
+        for (int idx = 0; idx < arr.size(); idx++) {
+            average += arr.get(idx).getSalaryInUSD();
+            count++;
+        }
+        return (average/count);
+    }
+    
+    //toString that returns the values for a Salaries object.
+    //this loops the first 20 data values in the dataset
+    public String toString() {
+        String fin = "";
+        for (int i = 0; i < 20; i++) {
+            /*String experience = allExperienceLevels[i];
+            String empTypes = allEmploymentTypes[i];
+            String jobs = allJobTitles[i];
+            int salaries = allSalaries[i];
+            int salariesInUSD = allSalariesinUSD[i];
+            String empResidences = allEmployeeResidences[i];
+            int remoteRatios = allRemoteRatios[i];
+            String compLocations = allCompanyLocations[i];
+            String compSizes = allCompanySizes[i];
+            */
+            //System.out.println(experience +" " + empTypes +" " +jobs +" " +salaries +" " +salariesInUSD +" " +empResidences +" " +remoteRatios +" " +compLocations +" " +compSizes);
+            fin+=arr.get(i)+"\n";
+        }   
+        return fin;    
+    }
+}
+
+import java.util.ArrayList;
+public class SalariesDatabase extends Database {
+        
+    private ArrayList <Salaries> arr = new ArrayList<Salaries>();
+    
+    public SalariesDatabase() {
+        //since this is a subclass, we are instantiating the DataBase file for Salaries.
+        super("Salaries.csv");
+        
+         //creating an ArrayList to append salary objects to.
+        ArrayList<Salaries> arr = new ArrayList<Salaries>();
+        
+        // Given a data "field name", get an array of all of 
+        //   data values.  
+        // Returns an array of every line of data for that field.  
+        // Note: use the method that matches the type of data to be read.
+        //   fetchStringArray for Strings
+        //   fetchIntArray for integers
+        //   fetchDoubleArray for doubles
+
+        //creating an array for every value of the Salaries Database that Im using/referencing.
+        //since this class is an extension of the Database class, we can call the fetchArray methods WITHOUT 
+        //needing to call a Database object on them. (like sdb which we used previously before moving this into the constructor)
+      	String [] allExperienceLevels = fetchStringArray("experience_level");
+        String [] allEmploymentTypes = fetchStringArray("employment_type");
+        String [] allJobTitles = fetchStringArray("job_title");
+        int [] allSalaries = fetchIntArray("salary");
+        int [] allSalariesinUSD = fetchIntArray("salary_in_usd");
+        String [] allEmployeeResidences = fetchStringArray("employee_residence");
+        int [] allRemoteRatios = fetchIntArray("remote_ratio"); 
+        String [] allCompanyLocations = fetchStringArray("company_location");
+        String [] allCompanySizes = fetchStringArray("company_size");
+           
+        //for loop loops through every value in every column and saves it to a value.
+        //then we use the Salaries constructor to create a new Salaries object.
+      	for( int idx = 0; idx < allJobTitles.length; idx++ ) {
+      	    
+      	   String expLevel = allExperienceLevels[idx];
+      	   String empType = allEmploymentTypes[idx];
+      	   String job = allJobTitles[idx];
+      	   int salary = allSalaries[idx];
+      	   int salaryInUSD = allSalariesinUSD[idx];
+      	   String empResidence = allEmployeeResidences[idx];
+      	   int remoteRatio = allRemoteRatios[idx];
+      	   String compLocation = allCompanyLocations[idx];
+      	   String compSize = allCompanySizes[idx];
+      	   
+      	   Salaries s = new Salaries(expLevel, empType, job, salary, salaryInUSD, 
+      	                    empResidence, remoteRatio, compLocation, compSize);
+      	                    
+      	 //then we add the new Salaries object to the ArrayList.
+      	   arr.add(s);
+        }
+        //so we are adding all of these values to the ArrayList, and since this is the constructor
+        //setting the ArrayList AFTER.
+        this.arr = arr;
+    }
+        
+    //the search query. getSalary returns a Salaries object given a level of 
+    //experience, company location, and company size.
+    public Salaries getSalaries(String expLevel, String job, String compLocation, String compSize) {
+                                    
+     for (int idx = 0; idx < arr.size(); idx++) {
+         //creating temporary salaries object x to call each "if-statement" on.
+         Salaries x = arr.get(idx);
+            if (x.getExpLevel().equals(expLevel) && x.getJob().equals(job) && x.getCompLocation().equals(compLocation) && x.getCompSize().equals(compSize)) {
+                return x;
+            }
+     }
+                return null;        
+    }
+    
+    //the characteristic search query, this method getSalariesMoreThan filters thru the arr
+    // ArrayList and returns a new ArrayList of Salaries objects more than the amount of the given int parameter.
+    public ArrayList<Salaries> getSalariesMoreThan(int amount) {
+        
+        ArrayList<Salaries> highSals = new ArrayList<Salaries>();
+        
+        for (int idx = 0; idx < arr.size(); idx++) {
+            //creating temporary salaries object x to call on.
+            Salaries x = arr.get(idx);
+            if (x.getSalaryInUSD() >= amount) {
+                highSals.add(x);
+            }
+        }
+        return highSals;
+    }
+    
+    //the calculation query. getAverageSalaryinUSD returns a double indicating the average Data Science 
+    //salary out of all the salaries, using the arr ArrayList.
+    public double getAverageSalaryinUSD() {
+        double average = 0;
+        double count = 0;
+        for (int idx = 0; idx < arr.size(); idx++) {
+            average += arr.get(idx).getSalaryInUSD();
+            count++;
+        }
+        return (average/count);
+    }
+    
+    //toString that returns the values for a Salaries object.
+    //this loops the first 20 data values in the dataset
+    public String toString() {
+        String fin = "";
+        for (int i = 0; i < 20; i++) {
+            /*String experience = allExperienceLevels[i];
+            String empTypes = allEmploymentTypes[i];
+            String jobs = allJobTitles[i];
+            int salaries = allSalaries[i];
+            int salariesInUSD = allSalariesinUSD[i];
+            String empResidences = allEmployeeResidences[i];
+            int remoteRatios = allRemoteRatios[i];
+            String compLocations = allCompanyLocations[i];
+            String compSizes = allCompanySizes[i];
+            */
+            //System.out.println(experience +" " + empTypes +" " +jobs +" " +salaries +" " +salariesInUSD +" " +empResidences +" " +remoteRatios +" " +compLocations +" " +compSizes);
+            fin+=arr.get(i)+"\n";
+        }   
+        return fin;    
+    }
+}
+
+public class Salaries {
+    
+    //the only thing in this class is the constructor, for readability.
+    private String experience_level;
+    private String employment_type;
+    private String job_title;
+    private int salary;
+    private int salary_in_usd;
+    private String employee_residence;
+    private int remote_ratio;
+    private String company_location;
+    private String company_size;
+    
+    public Salaries (String experience_level,
+    String employment_type, String job_title, int salary, int salary_in_usd, 
+    String employee_residence, int remote_ratio, String company_location, 
+    String company_size) {
+        
+        this.experience_level = experience_level;
+        this.employment_type = employment_type;
+        this.job_title = job_title;
+        this.salary = salary;
+        this.salary_in_usd =  salary_in_usd;
+        this.employee_residence = employee_residence;
+        this.remote_ratio = remote_ratio;
+        this.company_location = company_location;
+        this.company_size = company_size;
+        
+    }
+    
+    //returns experience level
+    public String getExpLevel() {
+        return experience_level;
+    }
+    
+    //returns job title
+    public String getJob() {
+        return job_title;
+    }
+    
+    //returns company location
+    public String getCompLocation() {
+        return company_location;
+    }
+    
+    //returns company size
+    public String getCompSize() {
+        return company_size;
+    }
+    
+    //returns the salary amount in USD
+    public int getSalaryInUSD() {
+        return salary_in_usd;
+    }
+    
+    //toString returns all of the values in each column of the database.
+    //since we are in this class where everything is representing one object, 
+    //we can just use all of the instance variables instead of getters and such.
+    public String toString() {
+        return experience_level +" " +employment_type +" " +job_title +" " +salary +" "  +salary_in_usd +" " +employee_residence +" "  +remote_ratio +" "  +company_location +" "  +company_size;
+    }
+    
+}
+
+// Required to include the CSV reading capabilities
+import java.util.ArrayList; //import ArrayList class
+import java.util.Scanner; //import Scanner class
+
+public class Main {
+ 
+    public static void main(String[] args) {
+       
+       //creating Scanner object called input.
+       Scanner input = new Scanner(System.in); 
+       
+        // Create a Database object that uses the Salaries.csv file
+        // To do : once you subclass the Database class, you should
+        //         not instantiate the Database here any longer.  
+        //         Use YOUR NEW CLASS.
+        
+        //Database sdb = new Database("Salaries.csv");
+       
+        // For testing, print out what data that we have in the CSV.  
+        // This function from the Database class will read the first 
+        //  line of the CSV file to determine what data 
+        //  fields are available.
+    	// To do: REMOVE THIS BEFORE SUBMITTING YOUR FINAL PROGRAM
+    	//        Just use it during testing to ensure that you can 
+    	//          read the data from the CSV. 
+    	//        It will also let you know which data fields that 
+    	//          you have.
+    	
+      	//sdb.printDataFields();
+        
+        
+    // THIS EXAMPLE SHOWS HOW TO PRINT SOME DATA
+    // Loop through the cereal name array and print out all of the name fields
+        /*
+        System.out.println("Here are the jobTitles and salaries");
+        for (int i = 0; i < allJobTitles.length; i++) {
+            String experience = allExperienceLevels[i];
+            String empTypes = allEmploymentTypes[i];
+            String jobs = allJobTitles[i];
+            int salaries = allSalaries[i];
+            int salariesInUSD = allSalariesinUSD[i];
+            String empResidences = allEmployeeResidences[i];
+            int remoteRatios = allRemoteRatios[i];
+            String compLocations = allCompanyLocations[i];
+            String compSizes = allCompanySizes[i];
+            
+            System.out.println(experience +" " + empTypes +" " +jobs +" " +salaries +" " +salariesInUSD +" " +empResidences +" " +remoteRatios +" " +compLocations +" " +compSizes);
+        
+        }
+        */
+        
+        //new SalariesDatabase object that takes in filename and name of ArrayList arr as parameters.
+        SalariesDatabase sData = new SalariesDatabase();
+        
+        //printing a header of the data values:
+        System.out.println("Here are the first 20 values of data from the Salaries Database: " +"\n" +"Data fields are Experience Level, Employment Type, Job Title, Salary, Salary in USD, Employee Residence, Ratio of Remote Work, Company Location, Company Size");
+        
+        System.out.println(sData); //calling toString to print out first 20 lines of data
+        
+        //executes Search query with introductory text indicating what is being queried as the result of the query.
+        System.out.println("Type a level of experience, company location, and company size to receive a salary.");
+        System.out.println("Level of experience: ");
+        String expLevel = input.nextLine();
+        System.out.println("Job Title: ");
+        String job = input.nextLine();
+        System.out.println("Company Location: ");
+        String compLocation = input.nextLine();
+        System.out.println("Company Size: ");
+        String compSize = input.nextLine();
+        
+        //print and call method with user-inputted parameters on arr ArrayList for Search query.
+        System.out.println(sData.getSalaries(expLevel, job, compLocation, compSize));
+        
+        //executes Characteristic Search query with introductory text indicating what is being queried as the result of the query.
+        //this method getSalariesMoreThan filters thru the arr ArrayList and returns a new ArrayList of Salaries objects more than the amount of the given int parameter.
+        System.out.println("Enter a minimum salary amount (int) that you'd like to search through: ");
+        int min = input.nextInt();
+        
+        //prints and calls method with sData object created previously in this class, and user-inputted min amount.
+        System.out.println(sData.getSalariesMoreThan(min));
+        
+        //executes Calculation query with introductory text indicating what is being queried as the result of the query.
+        System.out.println("The average salary amount for Data Science careers in USD is $" +sData.getAverageSalaryinUSD());
+        
+    }
+}
+
